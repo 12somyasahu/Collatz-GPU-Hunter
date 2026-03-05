@@ -1,0 +1,22 @@
+# Compiled binary
+collatz
+collatz.exe
+
+# Runtime output files — keep suspects and logs, ignore checkpoint optionally
+# checkpoint.txt   # uncomment this if you don't want to commit your progress
+stats_log.txt
+
+# CUDA intermediate files
+*.o
+*.ptx
+*.cubin
+*.fatbin
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
+*~
