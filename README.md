@@ -161,7 +161,7 @@ Tested on **RTX 3050 6GB Laptop GPU** (20 SMs):
 | Speed | ~1.5–2T numbers/sec |
 | GPU Utilization | 55–75% (limited by thread imbalance) |
 | GPU Temp | 65–85°C under load |
-| Time to cover 2^71 → 2^72 | ~1,600–2,000 days |
+| Time to cover 2^71 → 2^72 | ~1,400 years (single GPU) |
 GPU utilization isn't 100% because Barina early-stop means some threads finish much faster than others in the same warp — fast threads wait for slow ones. This is an inherent tradeoff of the algorithm.
 
 ---
