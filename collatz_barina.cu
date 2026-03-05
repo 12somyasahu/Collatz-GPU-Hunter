@@ -1,5 +1,7 @@
 // collatz_barina.cu  —  Barina hunter | Dashboard: Peak steps, GPU temp/util, ETA
 //
+// Starts at 2^71 + 1 = 2,361,183,241,434,822,606,849
+// Verified limit as of 2024: 2^71
 // Compile: nvcc -O3 -arch=sm_86 -o collatz collatz_barina.cu -lnvidia-ml
 // Run:     ./collatz
 
@@ -22,7 +24,7 @@ typedef unsigned long long u64;
 // Goal: search up to 2^69 (one full power past the record)
 // 2^69 - 2^68 = 2^68 numbers to check
 // In odd numbers that's 2^67
-#define GOAL_ODD  9223372036854775808ULL   // 2^63 odd numbers to check
+#define GOAL_ODD  9223372036854775808ULL   // sentinel (actual goal ~2^70 odd numbers, computed as double below)
 
 struct Entry { uint32_t pow3, addend; };
 __constant__ Entry d_table[TSIZE];
@@ -191,7 +193,7 @@ void draw_dashboard(
 
     // ETA: based on current speed vs remaining odd numbers to 2^69
     double odd_per_sec = elapsed > 0 ? (double)total_odd_done / elapsed : 0;
-    double goal_d      = 9223372036854775808.0;   // 2^63 as double
+    double goal_d      = 1180591620717411303424.0; // 2^70 odd numbers = half of 2^71 gap
     double done_d      = (double)total_odd_done;
     double pct         = done_d / goal_d * 100.0;
     if (pct > 100.0) pct = 100.0;
@@ -213,7 +215,7 @@ void draw_dashboard(
     for (int i = 0; i < filled; i++) bar[i] = '#';
 
     printf("+-------------------------------------------------+\n");
-    printf("|       COLLATZ BARINA HUNTER  (2^68 -> 2^69)    |\n");
+    printf("|       COLLATZ BARINA HUNTER  (2^71 -> 2^72)    |\n");
     printf("+-------------------------------------------------+\n");
     printf("|  Batch           : %-28d |\n", batch);
     printf("|  Numbers checked : %-28s |\n", buf_checked);
@@ -228,7 +230,7 @@ void draw_dashboard(
     printf("|  Utilization     : %3u%%                        |\n", gpu_util);
     printf("|  Temperature     : %3u C                        |\n", gpu_temp);
     printf("+-------------------------------------------------+\n");
-    printf("|  PROGRESS TO 2^69                              |\n");
+    printf("|  PROGRESS TO 2^72                              |\n");
     printf("|  [%-30s] %5.2f%%   |\n", bar, pct);
     printf("|  ETA             : %-28s |\n", buf_eta);
     printf("|  Elapsed         : %-28s |\n", buf_elapsed);
@@ -257,8 +259,9 @@ int main() {
     cudaMemcpyToSymbol(d_table, h_table, sizeof(h_table));
     printf("Lookup table ready.\n");
 
-    // 2^68 + 1 → hi=16, lo=1
-    const u64 START_HI = 16ULL;
+    // 2^71 + 1 → hi=128, lo=1
+    // 2^71 = 2^7 * 2^64, so upper 64 bits = 128, lower = 1
+    const u64 START_HI = 128ULL;
     const u64 START_LO = 1ULL;
 
     u64 total_odd_done = 0;
