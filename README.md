@@ -11,7 +11,7 @@ This program searches for numbers that **don't** reach 1 — either a non-trivia
 
 ## Features
 
-- 🚀 **Starts at 2^68 + 1** — beyond all previously verified territory
+- 🚀 **starting from 2^71 + 1** — beyond all previously verified territory
 - ⚡ **Barina early-stop optimization** — stops the moment a sequence drops below its start, skipping ~70% of work
 - 🧮 **8-bit lookup table** — processes 8 Collatz steps in a single GPU multiply
 - 🔢 **128-bit arithmetic** — handles numbers past 2^64 using `unsigned __int128`
@@ -26,7 +26,7 @@ This program searches for numbers that **don't** reach 1 — either a non-trivia
 
 ```
 +-------------------------------------------------+
-|       COLLATZ BARINA HUNTER  (2^68 -> 2^69)    |
+|      COLLATZ BARINA HUNTER  (2^71 -> 2^72)    |
 +-------------------------------------------------+
 |  Batch           : 439417                       |
 |  Numbers checked : 14.382T                      |
@@ -161,8 +161,7 @@ Tested on **RTX 3050 6GB Laptop GPU** (20 SMs):
 | Speed | ~1.5–2T numbers/sec |
 | GPU Utilization | 55–75% (limited by thread imbalance) |
 | GPU Temp | 65–85°C under load |
-| Time to cover 2^68 → 2^69 | ~200–250 days |
-
+| Time to cover 2^71 → 2^72 | ~1,600–2,000 days |
 GPU utilization isn't 100% because Barina early-stop means some threads finish much faster than others in the same warp — fast threads wait for slow ones. This is an inherent tradeoff of the algorithm.
 
 ---
@@ -175,8 +174,8 @@ GPU utilization isn't 100% because Barina early-stop means some threads finish m
 | Verified to 2^60 | Various | ~2000s |
 | Verified to 2^68 | David Barina | 2020 |
 | Tao's "almost proof" | Terence Tao | 2019 |
-| This project starts | You | 2025 |
-
+| Verified to 2^71   | Oliveira et al | 2024
+| This project starts | You | 2025
 Terence Tao proved in 2019 that almost all Collatz sequences reach arbitrarily small values — the closest anyone has gotten to a full proof. The conjecture remains open.
 
 ---
